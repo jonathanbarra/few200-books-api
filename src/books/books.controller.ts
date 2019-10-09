@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-
+import { Controller, Get, Post, Body, HttpException, BadRequestException } from '@nestjs/common';
+import * as cuid from 'cuid';
+import { BookCreate } from './models';
 @Controller('books')
 export class BooksController {
     books: Book[] = [
@@ -18,6 +19,16 @@ export class BooksController {
         });
 
     }
+
+    @Post()
+    addBook(@Body() book: BookCreate) {
+        if (book.author === 'King') {
+            throw new BadRequestException('We don\'t want more King books. Thanks');
+        }
+        const bookToAdd: Book = { ...book, id: cuid() };
+        this.books.push(bookToAdd);
+        return bookToAdd;
+    }
 }
 
 interface Book {
@@ -25,3 +36,4 @@ interface Book {
     title: string;
     author: string;
 }
+
