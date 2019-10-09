@@ -27,11 +27,12 @@ export class BooksController {
             setTimeout(() => {
                 if (book.author === 'King') {
                     rej(new BadRequestException('We don\'t want more King books. Thanks'));
-                }
+                } else {
 
-                const bookToAdd: Book = { ...book, id: cuid() };
-                this.books.push(bookToAdd);
-                res(bookToAdd);
+                    const bookToAdd: Book = { ...book, id: cuid() };
+                    this.books.push(bookToAdd);
+                    res(bookToAdd);
+                }
             }, 4000);
         });
     }
