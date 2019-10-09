@@ -21,13 +21,19 @@ export class BooksController {
     }
 
     @Post()
-    addBook(@Body() book: BookCreate) {
-        if (book.author === 'King') {
-            throw new BadRequestException('We don\'t want more King books. Thanks');
-        }
-        const bookToAdd: Book = { ...book, id: cuid() };
-        this.books.push(bookToAdd);
-        return bookToAdd;
+    async addBook(@Body() book: BookCreate) {
+        return new Promise((res, rej) => {
+
+            setTimeout(() => {
+                if (book.author === 'King') {
+                    rej(new BadRequestException('We don\'t want more King books. Thanks'));
+                }
+
+                const bookToAdd: Book = { ...book, id: cuid() };
+                this.books.push(bookToAdd);
+                res(bookToAdd);
+            }, 4000);
+        });
     }
 }
 
@@ -36,4 +42,3 @@ interface Book {
     title: string;
     author: string;
 }
-
